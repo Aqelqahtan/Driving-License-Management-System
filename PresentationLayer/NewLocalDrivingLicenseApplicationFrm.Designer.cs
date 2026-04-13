@@ -137,6 +137,7 @@
             PersonalInfo.TabIndex = 0;
             PersonalInfo.Text = "Personal Info";
             PersonalInfo.UseVisualStyleBackColor = true;
+            PersonalInfo.Click += PersonalInfo_Click;
             // 
             // NextBtn
             // 
@@ -572,14 +573,13 @@
             // 
             // FilterByComboBox
             // 
-            FilterByComboBox.Enabled = false;
+            FilterByComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             FilterByComboBox.FormattingEnabled = true;
-            FilterByComboBox.Items.AddRange(new object[] { "National No" });
+            FilterByComboBox.Items.AddRange(new object[] { "National No", "Person ID" });
             FilterByComboBox.Location = new Point(106, 22);
             FilterByComboBox.Name = "FilterByComboBox";
             FilterByComboBox.Size = new Size(181, 23);
             FilterByComboBox.TabIndex = 1;
-            FilterByComboBox.Text = "National No";
             // 
             // FindByLbl
             // 
@@ -653,11 +653,11 @@
             // 
             LicenseClassComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             LicenseClassComboBox.FormattingEnabled = true;
-            LicenseClassComboBox.Items.AddRange(new object[] { "Class 1 - Small Motorcycle", "Class 2 - Heavy Motorcycle License", "Class 3 - Ordinary driving license", "Class 4 - Commercial", "Class 5 - Agriculture", "Class 6 - Small and medium bus", "Class 7 - Truck and heavy vehicle" });
             LicenseClassComboBox.Location = new Point(274, 147);
             LicenseClassComboBox.Name = "LicenseClassComboBox";
             LicenseClassComboBox.Size = new Size(181, 23);
             LicenseClassComboBox.TabIndex = 108;
+            LicenseClassComboBox.SelectedIndexChanged += LicenseClassComboBox_SelectedIndexChanged;
             // 
             // pictureBox5
             // 
@@ -781,6 +781,7 @@
             SaveBtn.TabIndex = 14;
             SaveBtn.Text = "Save";
             SaveBtn.UseVisualStyleBackColor = true;
+            SaveBtn.Click += SaveBtn_Click;
             // 
             // CloseBtn
             // 

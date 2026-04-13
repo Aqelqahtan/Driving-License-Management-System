@@ -159,7 +159,7 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { showDetailsToolStripMenuItem, addNewUserToolStripMenuItem, editToolStripMenuItem, deleteToolStripMenuItem, changePasswordToolStripMenuItem, sendEmailToolStripMenuItem, phoneCallToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(197, 292);
+            contextMenuStrip1.Size = new Size(194, 270);
             // 
             // showDetailsToolStripMenuItem
             // 
@@ -167,7 +167,7 @@
             showDetailsToolStripMenuItem.Image = Properties.Resources.PersonDetails_321;
             showDetailsToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             showDetailsToolStripMenuItem.Name = "showDetailsToolStripMenuItem";
-            showDetailsToolStripMenuItem.Size = new Size(196, 38);
+            showDetailsToolStripMenuItem.Size = new Size(193, 38);
             showDetailsToolStripMenuItem.Text = "Show Details ";
             showDetailsToolStripMenuItem.Click += showDetailsToolStripMenuItem_Click;
             // 
@@ -177,7 +177,7 @@
             addNewUserToolStripMenuItem.Image = Properties.Resources.Add_New_User_32;
             addNewUserToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             addNewUserToolStripMenuItem.Name = "addNewUserToolStripMenuItem";
-            addNewUserToolStripMenuItem.Size = new Size(196, 38);
+            addNewUserToolStripMenuItem.Size = new Size(193, 38);
             addNewUserToolStripMenuItem.Text = "Add New User";
             addNewUserToolStripMenuItem.Click += addNewUserToolStripMenuItem_Click;
             // 
@@ -187,7 +187,7 @@
             editToolStripMenuItem.Image = Properties.Resources.edit_32;
             editToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             editToolStripMenuItem.Name = "editToolStripMenuItem";
-            editToolStripMenuItem.Size = new Size(196, 38);
+            editToolStripMenuItem.Size = new Size(193, 38);
             editToolStripMenuItem.Text = "Edit";
             editToolStripMenuItem.Click += editToolStripMenuItem_Click;
             // 
@@ -197,7 +197,7 @@
             deleteToolStripMenuItem.Image = Properties.Resources.Delete_32;
             deleteToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(196, 38);
+            deleteToolStripMenuItem.Size = new Size(193, 38);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -206,7 +206,7 @@
             changePasswordToolStripMenuItem.Image = Properties.Resources.Password_32;
             changePasswordToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             changePasswordToolStripMenuItem.Name = "changePasswordToolStripMenuItem";
-            changePasswordToolStripMenuItem.Size = new Size(196, 38);
+            changePasswordToolStripMenuItem.Size = new Size(193, 38);
             changePasswordToolStripMenuItem.Text = "Change Password";
             changePasswordToolStripMenuItem.Click += changePasswordToolStripMenuItem_Click;
             // 
@@ -216,7 +216,7 @@
             sendEmailToolStripMenuItem.Image = Properties.Resources.send_email_32;
             sendEmailToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             sendEmailToolStripMenuItem.Name = "sendEmailToolStripMenuItem";
-            sendEmailToolStripMenuItem.Size = new Size(196, 38);
+            sendEmailToolStripMenuItem.Size = new Size(193, 38);
             sendEmailToolStripMenuItem.Text = "Send Email";
             // 
             // phoneCallToolStripMenuItem
@@ -225,7 +225,7 @@
             phoneCallToolStripMenuItem.Image = Properties.Resources.call_321;
             phoneCallToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             phoneCallToolStripMenuItem.Name = "phoneCallToolStripMenuItem";
-            phoneCallToolStripMenuItem.Size = new Size(196, 38);
+            phoneCallToolStripMenuItem.Size = new Size(193, 38);
             phoneCallToolStripMenuItem.Text = "Phone Call";
             // 
             // CloseBtn

@@ -1,107 +1,139 @@
 ﻿using DataAccsessLayer;
+using Microsoft.IdentityModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    public class ClsLocalDrivingLicenseApplication
+    public class ClsLocalDrivingLicenseApplication : ClsApplication
     {
         public  int LDLAppID {  get; set; }
-        public  string DrivingClass { get; set; }
-        public  string NationalNo { get; set; }
-        public  string FullName { get; set; } 
-        public  DateTime ApplicationDate { get; set; }
-        public  int PassedTests { get; set; } 
-        public  string Status { get; set;}
+        public int LicenseClassID { get; set; }
+        public string DrivingClass { get; set; }
+        public string NationalNo { get; set; }
+        public string FullName { get; set; }
+        public string Status { get; set; }
+        public int PassedTests { get; set; }
 
-        private enum enMode { AddNewLocalDrivingLicenseApplication  = 0 , UpdateLocalDrivingLicenseApplication =1 }; 
-        enMode Mode = enMode.AddNewLocalDrivingLicenseApplication;
 
         public ClsLocalDrivingLicenseApplication()
         {
             this.LDLAppID = -1;
-            this.DrivingClass = "";
-            this.NationalNo = "";
-            this.FullName = "";
-            this.ApplicationDate = new DateTime(); 
-            this.PassedTests = 0;
-            this.Status = "";
-            Mode = enMode.AddNewLocalDrivingLicenseApplication; 
+            this.LicenseClassID = -1; 
+            
+            Mode = enMode.AddNew; 
         }
 
-        private ClsLocalDrivingLicenseApplication(int LDLAppID ,string DrivingClass , string NationalNo ,string FullName , DateTime ApplicationDate ,int PassedTests ,string Status)
+        private ClsLocalDrivingLicenseApplication(int LDLAppID , int ApplicationID , int LicenseClassID , string DrivingClass, string NationalNo, string FullName,DateTime ApplicationDate, int PassedTests, string Status)
         {
             this.LDLAppID= LDLAppID;
+            this.LicenseClassID= LicenseClassID;
+            this.ApplicationID = ApplicationID;
             this.DrivingClass = DrivingClass;
             this.NationalNo = NationalNo;
             this.FullName = FullName;
             this.ApplicationDate = ApplicationDate;
             this.PassedTests = PassedTests;
             this.Status = Status;
-
-            Mode = enMode.UpdateLocalDrivingLicenseApplication; 
+            Mode = enMode.Update;
         }
+        
 
-        public  bool Save()
+        private bool _AddNewLocalDrivingLicenseApplication()
         {
-            switch(Mode)
-            {
-                case enMode.AddNewLocalDrivingLicenseApplication:
-                    if (Add())
-                    {
-                        Mode  = enMode.UpdateLocalDrivingLicenseApplication;
-                       return true;
-                    } else { return false; }
+            this.LDLAppID = ClsLocalDrivingLicenseApplicationData.AddLocalDrivingLicenseApplicationData(
+                this.ApplicationID, this.LicenseClassID);
 
-                case enMode.UpdateLocalDrivingLicenseApplication:
-                    return Update();
-                       
-            }return false; 
+            return (this.LDLAppID != -1);
         }
 
+        public override bool Save()
+        {
+            enMode currentMode = base.Mode;
+            
+            if (!base.Save()) return false;
+
+            switch (currentMode)
+            {
+                case enMode.AddNew:
+                    if (_AddNewLocalDrivingLicenseApplication())
+                    {
+                        base.Mode = enMode.Update;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                case enMode.Update:
+                    return true;
+            }
+            return false;
+        }
+
+        public static DataTable GetALLData()
+        {
+            return ClsLocalDrivingLicenseApplicationData.GetAllLocalDrivingLicenseApplicationData();
+        }
+        public static int FindByLocalDrivingAppID(int LDLAppID)
+        {
+            return ClsLocalDrivingLicenseApplicationData.GetApplicationIDByLocalDrivingAppID(LDLAppID);
+        }
+        public static bool IsApplicationExist(int PersonID, int LicenseClassID)
+        {
+            return ClsLocalDrivingLicenseApplicationData.IsApplicationExist(PersonID, LicenseClassID);
+        }
+        
         public static ClsLocalDrivingLicenseApplication Find (int LDLAppID)
         {
-            string DrivingClass = "", NationalNo = "", FullName = "", Status = ""; 
-            DateTime ApplicationDate = new DateTime();
-            int PassedTests = 0; 
-            if (ClsLocalDrivingLicenseApplicationData.GetLocalDrivingLicenseApplicationDataByID( LDLAppID , ref DrivingClass , ref NationalNo ,ref FullName ,ref ApplicationDate ,ref PassedTests ,ref Status ))
+            int PassedTests = 0 , ApplicationID = -1 , LicenseClassID = -1 ;
+            string DrivingClass = "", NationalNo = "", FullName = "", Status = "";
+            DateTime ApplicationDate = DateTime.Now;
+
+            bool isFoundData = ClsLocalDrivingLicenseApplicationData.GetLocalDrivingLicenseApplicationDataByID(LDLAppID, ref DrivingClass, ref NationalNo, ref FullName, ref ApplicationDate, ref PassedTests, ref Status); 
+
+            if (isFoundData )
             {
-                return new ClsLocalDrivingLicenseApplication(LDLAppID, DrivingClass, NationalNo, FullName, ApplicationDate, PassedTests, Status); 
+                ApplicationID = ClsLocalDrivingLicenseApplicationData.GetApplicationIDByLocalDrivingAppID (LDLAppID);
+                
+                return new ClsLocalDrivingLicenseApplication(LDLAppID, ApplicationID ,LicenseClassID , DrivingClass, NationalNo, FullName, ApplicationDate, PassedTests, Status );
             }
             else
             {
-                return null;
+                return null; 
             }
-        }
-        public  bool Add()
-        {
-            this.LDLAppID = ClsLocalDrivingLicenseApplicationData.AddLocalDrivingLicenseApplicationData(this.DrivingClass, this.NationalNo, this.FullName, this.ApplicationDate, this.PassedTests, this.Status);
-
-            return (this.LDLAppID != -1);
-          
-        }
-        public static bool Delete(int LDLAppID)
-        {
-            return ClsLocalDrivingLicenseApplicationData.DeleteLocalDrivingLicenseApplicationData(LDLAppID);
+           
         }
 
-        public  bool Update()
+        public static bool CancelByLocalDrivingLicenseAppID(int LDLAppID)
         {
-            return ClsLocalDrivingLicenseApplicationData.UpdateLocalDrivingLicenseApplicationData(this.LDLAppID,this.DrivingClass,this.NationalNo,this.FullName,this.ApplicationDate,this.PassedTests,this.Status);
+            int ApplicationID = ClsLocalDrivingLicenseApplication.FindByLocalDrivingAppID(LDLAppID);
+            if (ApplicationID != -1)
+            {
+                return ClsApplication.CancelApplication(ApplicationID,ClsApplication.enApplicationStatus.Cancelled);
+            }
+
+            return false; 
         }
 
-        public static int Count()
+        public static int CountLocalDrivingLicenseApplication()
         {
             return ClsLocalDrivingLicenseApplicationData.CountLocalDrivingLicenseApplicationData();
         }
 
-        public static DataTable GetALLData ()
+        public  byte TotalTrialsPerTest (int TestTypeID)
         {
-            return ClsLocalDrivingLicenseApplicationData.GetAllLocalDrivingLicenseApplicationData(); 
+            return ClsLocalDrivingLicenseApplicationData.TotalTrialPerTest(this.LDLAppID,TestTypeID); 
+        }
+        public static int GetPassedNumber(int LDLAPPID)
+        {
+            return ClsLocalDrivingLicenseApplicationData.GetPassedTestNumbers(LDLAPPID);    
         }
     }
 }

@@ -16,9 +16,11 @@ namespace PresentationLayer
     public partial class NewLocalDrivingLicenseApplicationFrm : Form
     {
         private ClsPeople _Person;
+        private ClsLocalDrivingLicenseApplication _LocalDrivingLicenseApplication; 
         public NewLocalDrivingLicenseApplicationFrm()
         {
             InitializeComponent();
+            _FillLicenseClassesInComboBox();
             _Discharge();
         }
 
@@ -54,15 +56,20 @@ namespace PresentationLayer
             ApplicationDateResultLbl.Text = DateTime.Now.ToString();
             if (LicenseClassComboBox.SelectedValue != null)
             {
-                int selectedClassID = Convert.ToInt32(LicenseClassComboBox.SelectedValue);
-                ClsLicenseClass SelectClass = ClsLicenseClass.Find(selectedClassID);
-                if (SelectClass != null)
+                int selectedClassID;
+                if (int.TryParse(LicenseClassComboBox.SelectedValue.ToString(), out selectedClassID))
                 {
+                    ClsLicenseClass SelectClass = ClsLicenseClass.Find(selectedClassID);
+                    if (SelectClass != null)
+
                     {
-                        ApplicationFeesResultLbl.Text = SelectClass.ClassName.ToString();
+                        ApplicationFeesResultLbl.Text = SelectClass.ClassFees.ToString();
+
                     }
-                  
+
+
                 }
+
             }
         }
         private void _Discharge()
@@ -80,6 +87,19 @@ namespace PresentationLayer
             FilterByComboBox.SelectedIndex = 0;
             SearchTextBox.Clear();
         }
+        private void _FillLicenseClassesInComboBox()
+        {
+            DataTable dtClasses = ClsLicenseClass.GetAllLicenseClasses();
+
+            if (dtClasses != null && dtClasses.Rows.Count > 0)
+            {
+                LicenseClassComboBox.DisplayMember = "ClassName";
+
+                LicenseClassComboBox.ValueMember = "LicenseClassID";
+
+                LicenseClassComboBox.DataSource = dtClasses;
+            }
+        }
         private void CloseBtn_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -95,18 +115,51 @@ namespace PresentationLayer
         {
             if (SearchTextBox.Text.IsNullOrEmpty())
             {
-                MessageBox.Show("Enter the National No first !");
+                if (FilterByComboBox.SelectedIndex == 0)
+                {
+                    MessageBox.Show("Enter the National No first !");
+                }
+                else
+                {
+                    MessageBox.Show("Enter the Person ID first !");
+                }
                 return;
             }
 
-            _Person = ClsPeople.Find(SearchTextBox.Text);
+            if (FilterByComboBox.SelectedIndex == 0)
+            {
+                _Person = ClsPeople.Find(SearchTextBox.Text);
+
+            }
+            else if (FilterByComboBox.SelectedIndex == 1)
+            {
+                if (int.TryParse(SearchTextBox.Text, out int PersonID))
+                {
+                    _Person = ClsPeople.Find(PersonID);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid Person ID (numbers only)!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+
+            }
             if (_Person != null)
             {
                 _LoadPersonData();
             }
             else
             {
-                MessageBox.Show("There is no person with [" + SearchTextBox.Text + "] in the system !");
+                if (FilterByComboBox.SelectedIndex == 0)
+                {
+                    MessageBox.Show("There is no person with National No [" + SearchTextBox.Text + "] in the system !");
+                }
+                else
+                {
+                    MessageBox.Show("There is no person with Person ID [" + SearchTextBox.Text + "] in the system !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
                 _Discharge();
             }
         }
@@ -158,6 +211,56 @@ namespace PresentationLayer
                 e.SuppressKeyPress = true;
                 FindUserPictureBox_Click(sender, e);
             }
+        }
+
+        private void PersonalInfo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LicenseClassComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _LoadApplicationInfo();
+        }
+
+        private void SaveBtn_Click(object sender, EventArgs e)
+        {
+
+            int selectedClassID = Convert.ToInt32(LicenseClassComboBox.SelectedValue);
+
+            if (ClsLocalDrivingLicenseApplication.IsApplicationExist(_Person.PersonID,selectedClassID))
+            {
+                MessageBox.Show("This Person have the same class , Choose another class !", "Error" , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
+            if (_LocalDrivingLicenseApplication == null)
+            {
+                _LocalDrivingLicenseApplication = new ClsLocalDrivingLicenseApplication();
+            }
+            _LocalDrivingLicenseApplication.ApplicantPersonID = _Person.PersonID; 
+            _LocalDrivingLicenseApplication.NationalNo = _Person.NationalNO;
+            _LocalDrivingLicenseApplication.ApplicationTypeID = 1;
+            _LocalDrivingLicenseApplication.ApplicationStatus = ClsApplication.enApplicationStatus.New;
+            _LocalDrivingLicenseApplication.LastStatusDate = DateTime.Now;
+            _LocalDrivingLicenseApplication.CreatedByUserID = 1; 
+            _LocalDrivingLicenseApplication.FullName = _Person.FirstName + " " + _Person.SecondName + " " + _Person.ThirdName + " " + _Person.LastName;
+            _LocalDrivingLicenseApplication.ApplicationDate = DateTime.Now;
+            _LocalDrivingLicenseApplication.PaidFees = Convert.ToDecimal(ApplicationFeesResultLbl.Text) ;
+            _LocalDrivingLicenseApplication.LicenseClassID = Convert.ToInt32(LicenseClassComboBox.SelectedValue);
+            _LocalDrivingLicenseApplication.Status = "New"; 
+
+            if (_LocalDrivingLicenseApplication.Save())
+            {
+                MessageBox.Show("Saved Successfully");
+                DLApplicationIDResultLbl.Text = _LocalDrivingLicenseApplication.LDLAppID.ToString();
+                SaveBtn.Enabled = false; 
+                return; 
+
+            }else
+            {
+                MessageBox.Show("Error", "Failed Operation");
+            }
+
         }
     }
 }

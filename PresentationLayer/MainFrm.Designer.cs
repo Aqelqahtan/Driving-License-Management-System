@@ -187,7 +187,7 @@
             manageToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             manageToolStripMenuItem.Name = "manageToolStripMenuItem";
             manageToolStripMenuItem.Size = new Size(292, 38);
-            manageToolStripMenuItem.Text = "Manage Application Types";
+            manageToolStripMenuItem.Text = "Manage Test Types";
             manageToolStripMenuItem.Click += manageToolStripMenuItem_Click;
             // 
             // peoplToolStripMenuItem
