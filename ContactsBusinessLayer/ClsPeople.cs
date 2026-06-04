@@ -157,9 +157,6 @@ namespace BusinessLayer
         {
             return DataAcsessLayer.PersonData.isNationalNoExist(NationalNo);
         }
-        public static int GetTotalPerson()
-        {
-            return DataAcsessLayer.PersonData.CollectTotalPerson();
-        }
+       
     }
 }

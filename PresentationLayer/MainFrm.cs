@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using PresentationLayer.User;
 
 namespace PresentationLayer
 {
@@ -12,15 +13,11 @@ namespace PresentationLayer
         public ClsUsers User;
         private void peopleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
+            
+            
                 ManagePeopleFrm frm = new ManagePeopleFrm();
                 frm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء فتح الشاشة:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+           
         }
 
         private void signOutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -71,6 +68,65 @@ namespace PresentationLayer
         private void localDrivingLicenseApplicationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LocalDrivingLicenseApplicationsFrm frm = new LocalDrivingLicenseApplicationsFrm();
+            frm.ShowDialog();
+        }
+
+        private void driversToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ListDriverFrm frm = new ListDriverFrm();
+            frm.ShowDialog();
+        }
+
+        private void internationalLicesnseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewInternationalLicenseApplicationFrm newInternationalLicenseApplicationFrm = new NewInternationalLicenseApplicationFrm();
+            newInternationalLicenseApplicationFrm.ShowDialog();
+
+        }
+
+        private void internationalLicenseApplicationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ListInternationalLicenseApplicationsFrm frm = new ListInternationalLicenseApplicationsFrm();
+            frm.ShowDialog();
+        }
+
+        private void renewDrivingLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RenewLocalDrivingLicenseFrm frm = new RenewLocalDrivingLicenseFrm();
+            frm.ShowDialog();
+        }
+
+        private void replacementForLostDamgedLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplacementForDamagedLicenseFrm frm = new ReplacementForDamagedLicenseFrm();
+            frm.ShowDialog();
+
+        }
+
+        private void dToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DetainLicenseFrm frm = new DetainLicenseFrm();
+            frm.ShowDialog();
+
+        }
+
+        private void relaseDetainedLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReleaseDetainedLicenseFrm frm = new ReleaseDetainedLicenseFrm();
+            frm.ShowDialog();
+
+        }
+
+        private void manageDetainedLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            ListDetainedLicenseFrm frm = new ListDetainedLicenseFrm();
+            frm.ShowDialog();
+        }
+
+        private void releaseDetainedDrivingLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReleaseDetainedLicenseFrm frm = new ReleaseDetainedLicenseFrm();
             frm.ShowDialog();
         }
     }

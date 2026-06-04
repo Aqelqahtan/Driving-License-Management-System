@@ -307,28 +307,7 @@ inner join Countries on People.NationalityCountryID = Countries.CountryID";
             return isFound;
         }
 
-        public static int CollectTotalPerson()
-        {
-            int TotalPerosn = 0;
-            SqlConnection connection = new SqlConnection(ClsDataAccessSetting.ConnectionString);
-            string query = "select count(*) FROM People ";
-            SqlCommand command = new SqlCommand(query, connection);
-            try
-            {
-                connection.Open();
-                object result = command.ExecuteScalar();
-                if (result != null && int.TryParse(result.ToString(), out int count))
-                {
-                    TotalPerosn = count;
-                }
-
-            }
-
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            finally { connection.Close(); }
-
-            return TotalPerosn;
-        }
+       
  }
             
 

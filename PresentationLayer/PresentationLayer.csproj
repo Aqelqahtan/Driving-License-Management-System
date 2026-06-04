@@ -41,4 +41,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Applications\Controls\" />
+    <Folder Include="Applications\Renew Local License\" />
+  </ItemGroup>
+
 </Project>

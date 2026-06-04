@@ -29,7 +29,7 @@ namespace BusinessLayer
             Mode = enMode.AddNew; 
         }
 
-        private ClsLocalDrivingLicenseApplication(int LDLAppID , int ApplicationID , int LicenseClassID , string DrivingClass, string NationalNo, string FullName,DateTime ApplicationDate, int PassedTests, string Status)
+        private ClsLocalDrivingLicenseApplication(int LDLAppID , int ApplicationID , int LicenseClassID , string DrivingClass, string NationalNo, string FullName,DateTime ApplicationDate, int PassedTests, string Status , int ApplicationPersonID)
         {
             this.LDLAppID= LDLAppID;
             this.LicenseClassID= LicenseClassID;
@@ -40,6 +40,7 @@ namespace BusinessLayer
             this.ApplicationDate = ApplicationDate;
             this.PassedTests = PassedTests;
             this.Status = Status;
+            this.ApplicantPersonID = ApplicationPersonID;
             Mode = enMode.Update;
         }
         
@@ -92,17 +93,16 @@ namespace BusinessLayer
         
         public static ClsLocalDrivingLicenseApplication Find (int LDLAppID)
         {
-            int PassedTests = 0 , ApplicationID = -1 , LicenseClassID = -1 ;
+            int PassedTests = 0 , ApplicationID = -1 , LicenseClassID = -1 , ApplicationPersonID = -1 ;
             string DrivingClass = "", NationalNo = "", FullName = "", Status = "";
             DateTime ApplicationDate = DateTime.Now;
 
-            bool isFoundData = ClsLocalDrivingLicenseApplicationData.GetLocalDrivingLicenseApplicationDataByID(LDLAppID, ref DrivingClass, ref NationalNo, ref FullName, ref ApplicationDate, ref PassedTests, ref Status); 
-
+            bool isFoundData = ClsLocalDrivingLicenseApplicationData.GetLocalDrivingLicenseApplicationDataByID(LDLAppID, ref LicenseClassID, ref DrivingClass, ref NationalNo, ref FullName, ref ApplicationDate, ref PassedTests, ref Status , ref ApplicationPersonID);
             if (isFoundData )
             {
                 ApplicationID = ClsLocalDrivingLicenseApplicationData.GetApplicationIDByLocalDrivingAppID (LDLAppID);
                 
-                return new ClsLocalDrivingLicenseApplication(LDLAppID, ApplicationID ,LicenseClassID , DrivingClass, NationalNo, FullName, ApplicationDate, PassedTests, Status );
+                return new ClsLocalDrivingLicenseApplication(LDLAppID, ApplicationID ,LicenseClassID , DrivingClass, NationalNo, FullName, ApplicationDate, PassedTests, Status , ApplicationPersonID );
             }
             else
             {
@@ -133,7 +133,12 @@ namespace BusinessLayer
         }
         public static int GetPassedNumber(int LDLAPPID)
         {
-            return ClsLocalDrivingLicenseApplicationData.GetPassedTestNumbers(LDLAPPID);    
+            return ClsLocalDrivingLicenseApplicationData.GetPassedTestNumbers(LDLAPPID);   
+        }
+
+        public static bool Delete (int LDLAppID)
+        {
+            return (ClsLocalDrivingLicenseApplicationData.DeleteLocalDrivingLicenseApplication(LDLAppID));
         }
     }
 }

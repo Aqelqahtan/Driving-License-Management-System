@@ -39,23 +39,23 @@ namespace DataAccsessLayer
 
                     CountryName = (string)reader["CountryName"];
 
-                    if (reader["Code"] != DBNull.Value)
-                    {
-                        Code = (string)reader["Code"];
-                    }
-                    else
-                    {
-                        Code = "";
-                    }
+                //    if (reader["Code"] != DBNull.Value)
+                  //  {
+                    //    Code = (string)reader["Code"];
+                   // }
+                    //else
+                    //{
+                      //  Code = "";
+                    //}
 
-                    if (reader["PhoneCode"] != DBNull.Value)
-                    {
-                        PhoneCode = (string)reader["PhoneCode"];
-                    }
-                    else
-                    {
-                        PhoneCode = "";
-                    }
+                    //if (reader["PhoneCode"] != DBNull.Value)
+                    //{
+                      //  PhoneCode = (string)reader["PhoneCode"];
+                    //}
+                    //else
+                    //{
+                      //  PhoneCode = "";
+                   // }
 
                 }
                 else

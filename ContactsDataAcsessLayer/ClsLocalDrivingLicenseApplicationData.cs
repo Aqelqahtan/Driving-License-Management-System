@@ -35,12 +35,16 @@ namespace DataAccsessLayer
 
             return LocalDrivingLicenseApplication;
         }
-        public static bool GetLocalDrivingLicenseApplicationDataByID(int LDLAppID, ref string DrivingClass, ref string NationalNo, ref string FullName, ref DateTime ApplicationDate, ref int PassedTests, ref string Status)
+        public static bool GetLocalDrivingLicenseApplicationDataByID(int LDLAppID,ref int LicenseClassID ,  ref string DrivingClass, ref string NationalNo, ref string FullName, ref DateTime ApplicationDate, ref int PassedTests, ref string Status , ref int ApplicantPersonID)
         {
             bool IsFound = false;
             SqlConnection connection = new SqlConnection(ClsDataAccessSetting.ConnectionString);
-            string query = "SELECT * from vw_LocalDrivingLicenseApplications where [L.D.L.AppID] = @LDLAppID";
-            SqlCommand command = new SqlCommand(query, connection);
+            string query = @"SELECT vw_LocalDrivingLicenseApplications.*, 
+                        LocalDrivingLicenseApplications.LicenseClassID
+                 FROM   vw_LocalDrivingLicenseApplications 
+                 INNER JOIN LocalDrivingLicenseApplications 
+                 ON vw_LocalDrivingLicenseApplications.[L.D.L.AppID] = LocalDrivingLicenseApplications.LocalDrivingLicenseApplicationID
+                 WHERE vw_LocalDrivingLicenseApplications.[L.D.L.AppID] = @LDLAppID"; SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@LDLAppID", LDLAppID);
 
             connection.Open();
@@ -48,9 +52,11 @@ namespace DataAccsessLayer
             if (reader.Read())
             {
                 IsFound = true;
+                ApplicantPersonID = (int)reader["ApplicantPersonID"];
                 DrivingClass = (string)reader["Driving Class"];
                 NationalNo = (string)reader["National No"];
                 FullName = (string)reader["Full Name"];
+                LicenseClassID = (int)reader["LicenseClassID"];
                 ApplicationDate = (DateTime)reader["Application Date"];
                 PassedTests = reader["Passed Tests"] == DBNull.Value ? 0 : (int)reader["Passed Tests"];
                 Status = (string)reader["Status"];
@@ -130,26 +136,7 @@ namespace DataAccsessLayer
 
             return rowaffected > 0;
         }
-        public static bool DeleteLocalDrivingLicenseApplicationData(int LDLAppID)
-        {
-            int rowAffected = 0;
-            SqlConnection connection = new SqlConnection(ClsDataAccessSetting.ConnectionString);
-
-            string query = @"Delete from LocalDrivingLicenseApplications where LDLAppID = @LDLAppID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@LDLAppID", LDLAppID);
-            try
-            {
-                connection.Open();
-                rowAffected = command.ExecuteNonQuery();
-            }
-            catch (Exception ex) { return false; }
-            finally { connection.Close(); }
-
-            return rowAffected > 0;
-
-        }
+       
         public static int CountLocalDrivingLicenseApplicationData()
         {
             int total = 0;
@@ -276,5 +263,25 @@ namespace DataAccsessLayer
 
             return PassedNumber;
         }
+
+        public static bool DeleteLocalDrivingLicenseApplication(int LDLAppID)
+        {
+            int rowsAffected = 0;   
+            SqlConnection connection = new SqlConnection(ClsDataAccessSetting.ConnectionString) ;   
+            string query = "DELETE FROM LocalDrivingLicenseApplications where LocalDrivingLicenseApplicationID = @LDLAppID"; 
+            SqlCommand command = new SqlCommand (query, connection);
+            command.Parameters.AddWithValue("@LDLAppID", LDLAppID); 
+            try
+            {
+                connection.Open();
+                rowsAffected = command.ExecuteNonQuery(); 
+            }
+            catch (Exception ex) { }
+            finally {connection.Close(); }
+            return rowsAffected > 0;
+
+        }
+
+
     }
 }
